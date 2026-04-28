@@ -109,10 +109,19 @@ public class GameManager : MonoBehaviour
         if (gameOverPanel != null)
         {
             gameOverPanel.SetActive(true);
-            winnerText.text = $"P{winnerID} 贏得了好感！";
+            winnerText.text = "Player " + winnerID + " Wins!";
+
+            // 根據贏家改變文字顏色 (選用)
+            winnerText.color = (winnerID == 0) ? Color.cyan : Color.red;
         }
 
         // 3. 凍結
         Time.timeScale = 0f; 
+    }
+
+    public void GoToMainMenu()
+    {
+        Time.timeScale = 1f; // 確保時間正常流動
+        SceneManager.LoadScene("StartMenu"); // 跳回開始場景
     }
 }

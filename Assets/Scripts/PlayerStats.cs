@@ -27,10 +27,14 @@ public class PlayerStats : MonoBehaviour
 
         UpdateAffectionUI();
         Debug.Log($"{gameObject.name} 的好感度現在是: {affection}");
+
         if (affection >= 5)
         {
-            // 取得 GameManager 並觸發遊戲結束，傳入自己的玩家 ID
-            FindObjectOfType<GameManager>().GameOver(playerID);
+            GameManager gm = FindObjectOfType<GameManager>();
+            if (gm != null)
+            {
+                gm.GameOver(this.playerID);
+            }
         }
     }
 
