@@ -14,6 +14,10 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private TextMeshProUGUI moneyText;
     [SerializeField] private List<GameObject> affectionSegments; // 拖入那 5 個格子
 
+    [Header("掉落設定")]
+    [SerializeField] private GameObject coinPrefab; // 拖入你的金幣 Prefab
+    [SerializeField] private int dropAmount = 10;   // 每次掉多少錢
+
     void Start()
     {
         UpdateUI();
@@ -47,7 +51,7 @@ public class PlayerStats : MonoBehaviour
         {
             if (affectionSegments[i] != null)
             {
-                // 假設你有 5 格，affection=0 時，i < 0 恆為 false，全部隱藏
+                // affection=0 時，i < 0 恆為 false，全部隱藏
                 // affection=1 時，只有 i=0 會顯示
                 affectionSegments[i].SetActive(i < affection);
             }
@@ -63,6 +67,38 @@ public class PlayerStats : MonoBehaviour
 
         UpdateUI();
         Debug.Log($"{gameObject.name} 現在有 {money} 元");
+    }
+
+    public void LoseMoneyOnAttack()
+    {
+        if (money >= dropAmount)
+        {
+            // 1. 扣除金錢
+            money -= dropAmount;
+            UpdateUI();
+
+            // 2. 在玩家身邊生成金幣
+            SpawnDroppedCoin();
+
+            Debug.Log($"{gameObject.name} 被攻擊，掉落了 {dropAmount} 元！");
+        }
+    }
+
+    private void SpawnDroppedCoin()
+    {
+        // 設定掉落位置：在玩家位置加上一個隨機的偏移量，避免金幣直接生在玩家腳下立刻又被吃掉
+        Vector3 randomOffset = new Vector3(Random.Range(-80f, 80f), 10f, Random.Range(-80f, 80f));
+        Vector3 dropPos = transform.position + randomOffset;
+
+        // 生成金幣
+        GameObject droppedCoin = Instantiate(coinPrefab, dropPos, coinPrefab.transform.rotation);
+
+        // 讓生成器知道多了一個金幣，維持數量平衡
+        CoinSpawner spawner = FindObjectOfType<CoinSpawner>();
+        if (spawner != null)
+        {
+            spawner.NotifyManualCoinSpawn();
+        }
     }
 
     public void SpendMoney(int amount)
@@ -81,4 +117,5 @@ public class PlayerStats : MonoBehaviour
             moneyText.text = money.ToString();
         }
     }
+
 }

@@ -26,6 +26,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] [Range(80f, 120f)] private float attackRadius = 100f; // 攻擊判定半徑
     [SerializeField] [Range(0.5f, 5f)] private float stunDuration = 2.0f; // 暈眩時間
 
+    [Header("NPC Cache")]
+    private NPCVision[] cachedNPCs; // 用來儲存場景中所有 NPC 的引用
+
+    [Header("Invincibility & Boost")]
+    [SerializeField] private float invincibilityDuration = 2.0f; // 無敵時間
+    [SerializeField] private float speedBoostMultiplier = 1.5f; // 加速倍率
+    private float invincibilityTimer = 0f;
+    private bool isInvincible = false;
+
     private bool isCarryingGift = false;
     private bool isStunned;
     private float stunTimer = 0f;
@@ -36,6 +45,11 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+
+        // 在遊戲開始時只抓取一次，存進快取中
+        cachedNPCs = FindObjectsOfType<NPCVision>();
+
+        Debug.Log($"玩家 {playerID} 已快取 {cachedNPCs.Length} 個 NPC 視線系統");
     }
 
     void Update()
@@ -96,12 +110,19 @@ public class PlayerController : MonoBehaviour
         if (giftVisual != null) giftVisual.SetActive(false);
     }
 
-
     void ApplyMovement()
     {
-        if (isStunned) return; // 暈眩中不執行移動邏輯
+        if (isStunned) return;
 
+        // 基礎速度
         float currentSpeed = moveSpeed;
+
+        // 如果在無敵期間，速度加倍
+        if (isInvincible)
+        {
+            currentSpeed *= speedBoostMultiplier;
+        }
+
         rb.linearVelocity = moveInput * currentSpeed;
 
         if (moveInput != Vector3.zero)
@@ -121,10 +142,31 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // 被打中時觸發
+    public void GetHit(float duration)
+    {
+        // 如果正在暈眩中 或 處於無敵狀態，則直接無視這次攻擊
+        if (isStunned || isInvincible) return;
+
+        // 觸發掉錢邏輯
+        PlayerStats stats = GetComponent<PlayerStats>();
+        if (stats != null)
+        {
+            stats.LoseMoneyOnAttack();
+        }
+
+        // 觸發暈眩
+        isStunned = true;
+        stunTimer = duration;
+    }
+
+
     void PerformAttack()
     {
         Vector3 attackPoint = transform.position + transform.forward * attackRange;
         Collider[] hitColliders = Physics.OverlapSphere(attackPoint, attackRadius);
+
+        bool hitAnyPlayer = false;
 
         foreach (var hitCollider in hitColliders)
         {
@@ -133,22 +175,40 @@ public class PlayerController : MonoBehaviour
                 PlayerController opponent = hitCollider.GetComponent<PlayerController>();
                 if (opponent != null)
                 {
-                    opponent.GetHit(stunDuration); // 現在只剩暈眩效果
-                    Debug.Log($"{gameObject.name} 擊暈了對手！");
+                    opponent.GetHit(stunDuration);
+                    hitAnyPlayer = true;
                 }
             }
         }
+
+        // 只要有擊中對手，就檢查是否有 NPC 看到
+        if (hitAnyPlayer)
+        {
+            CheckIfCaughtByNPC();
+        }
     }
-    // 被打中時觸發
-    public void GetHit(float duration)
-    {
-        if (isStunned) return;
-        isStunned = true;
-        stunTimer = duration;
+
+    void CheckIfCaughtByNPC()
+    {        
+        if (cachedNPCs == null || cachedNPCs.Length == 0) return;
+
+        foreach (NPCVision npc in cachedNPCs)
+        {
+            if (npc != null && npc.CanSeePlayer(this.transform))
+            {
+                PlayerStats myStats = GetComponent<PlayerStats>();
+                if (myStats != null)
+                {
+                    myStats.AddAffection(-1);
+                    Debug.Log($"{gameObject.name} 被 NPC 抓到了！");
+                }
+                break;
+            }
+        }
     }
 
 
-    // 在 Scene 視窗畫出攻擊範圍 (方便你調整數值)
+    // 在 Scene 視窗畫出攻擊範圍 (方便調整數值)
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;

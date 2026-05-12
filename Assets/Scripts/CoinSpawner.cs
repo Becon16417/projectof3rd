@@ -65,4 +65,9 @@ public class CoinSpawner : MonoBehaviour
     {
         currentCoinCount--;
     }
+
+    public void NotifyManualCoinSpawn()
+    {
+        currentCoinCount++;
+    }
 }
