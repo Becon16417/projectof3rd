@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("腳步聲")]
+    [SerializeField] private AudioSource footstepAudioSource;
+    [SerializeField] private AudioClip footsteClip;
+
     [Header("ID")]
     [SerializeField] private int playerID;
     public int GetPlayerID() => playerID;
@@ -45,6 +49,11 @@ public class PlayerController : MonoBehaviour
         cachedNPCs = FindObjectsOfType<NPCVision>();
 
         Debug.Log($"玩家 {playerID} 已快取 {cachedNPCs.Length} 個 NPC 視線系統");
+
+        if (footstepAudioSource != null && footsteClip != null)
+        {
+            footstepAudioSource.clip = footsteClip;
+        }
     }
 
     void Update()
@@ -92,6 +101,7 @@ public class PlayerController : MonoBehaviour
         else if (Input.GetKey(moveRight)) x = 1;
 
         moveInput = new Vector3(x, 0, z).normalized;
+        HandleFootstepSound();
     }
 
     void ApplyMovement()
@@ -173,7 +183,7 @@ public class PlayerController : MonoBehaviour
     }
 
     void CheckIfCaughtByNPC()
-    {        
+    {
         if (cachedNPCs == null || cachedNPCs.Length == 0) return;
 
         foreach (NPCVision npc in cachedNPCs)
@@ -199,4 +209,30 @@ public class PlayerController : MonoBehaviour
         Vector3 attackPoint = transform.position + transform.forward * attackRange;
         Gizmos.DrawWireSphere(attackPoint, attackRadius);
     }
+
+    void HandleFootstepSound()
+    {
+        if (footstepAudioSource == null) return;
+
+        // 如果 moveInput 不等於 Vector3.zero，代表玩家現在有輸入移動方向
+        bool isMoving = (moveInput != Vector3.zero);
+
+        if (isMoving)
+        {
+            // 如果在移動，且音效還沒播放，就開始播
+            if (!footstepAudioSource.isPlaying)
+            {
+                footstepAudioSource.Play();
+            }
+        }
+        else
+        {
+            // 如果停下來了，且音效正在播，就暫停
+            if (footstepAudioSource.isPlaying)
+            {
+                footstepAudioSource.Pause();
+            }
+        }
+    }
+
 }

@@ -188,6 +188,7 @@ MonoBehaviour:
   knockbackSpeed: 300
   knockupSpeed: 400
   carStunDuration: 2
+  hitSound: {fileID: 8300000, guid: bed8db6e38dbf574eb93c2c04bc5d1af, type: 3}
 --- !u!1 &6803423991997144897
 GameObject:
   m_ObjectHideFlags: 0

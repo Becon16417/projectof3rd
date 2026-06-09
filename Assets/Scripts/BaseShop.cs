@@ -8,6 +8,9 @@ public class BaseShop : MonoBehaviour
     [Header("旋轉")]
     [SerializeField] private float rotateSpeed = 90f;  // 每秒旋轉的角度
 
+    [Header("音效")]
+    [SerializeField] private AudioClip successSound;
+
     private void Update()
     {
         // 讓方塊沿著自己的 X 軸自轉
@@ -18,6 +21,8 @@ public class BaseShop : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             PlayerStats playerStats = other.GetComponent<PlayerStats>();
+
+            AudioSource playerAudio = other.GetComponent<AudioSource>();
 
             if (playerStats != null)
             {
@@ -32,6 +37,10 @@ public class BaseShop : MonoBehaviour
                         // 交易成功，使用原本的 SpendMoney() 扣除金幣
                         playerStats.SpendMoney(requiredCost);
                         Debug.Log($"{other.name} 成功購買 {gameObject.name}，扣除 {requiredCost} 元。");
+                        if(playerAudio != null && successSound != null)
+                        {
+                            playerAudio.PlayOneShot(successSound);
+                        }
                     }
                 }
                 else
