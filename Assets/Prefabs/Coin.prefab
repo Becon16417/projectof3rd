@@ -124,6 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e396419d1d29224fa4a6f4c0c83e86f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  coinSound: {fileID: 8300000, guid: 112ca084c9a0c9345883a1dd40d6b3c9, type: 3}
   coinValue: 10
   moneyPopupPrefab: {fileID: 6937136655199835571, guid: e86fd019f83e370418ec76e82fa35b29, type: 3}
 --- !u!54 &8854862781770255009

@@ -11,6 +11,9 @@ public class CarObstacle : MonoBehaviour
     public float knockupSpeed = 6f;     // 向上噴發速度
     public float carStunDuration = 1.5f;
 
+    [Header("音效")]
+    [SerializeField] private AudioClip hitSound;
+
     private Vector3 moveDirection;
 
     public void Initialize(Vector3 direction, float chosenSpeed)
@@ -33,6 +36,8 @@ public class CarObstacle : MonoBehaviour
             PlayerController playerCtrl = other.GetComponent<PlayerController>();
             Rigidbody playerRb = other.GetComponent<Rigidbody>();
 
+            AudioSource playerAudio = other.GetComponent<AudioSource>();
+
             if (playerCtrl != null && playerRb != null)
             {
                 // 觸發暈眩與掉錢
@@ -49,6 +54,11 @@ public class CarObstacle : MonoBehaviour
                 Vector3 finalVelocity = (knockbackDir * knockbackSpeed) + (Vector3.up * knockupSpeed);
 
                 playerRb.linearVelocity = finalVelocity;
+
+                if(playerAudio != null && hitSound != null)
+                {
+                    playerAudio.PlayOneShot(hitSound);
+                }
 
                 Debug.Log($"[相對位置擊飛] 玩家位置 {other.transform.position}，車子位置 {transform.position}，推開方向為：{knockbackDir}");
             }
