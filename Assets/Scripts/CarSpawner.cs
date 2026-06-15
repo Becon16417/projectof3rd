@@ -9,20 +9,36 @@ public class CarSpawner : MonoBehaviour
     [Header("發射方向設定")]
     public Vector3 spawnDirection = Vector3.forward;
 
-    // 在 Inspector 面板控制車速範圍
     [Header("隨機車速設定")]
     public float minSpeed = 500f;  // 最慢車速
     public float maxSpeed = 900f; // 最快車速
 
+    [Header("隨機生成時間設定 (秒)")]
+    public float minSpawnInterval = 2f; // 最快生一台
+    public float maxSpawnInterval = 6f; // 最慢生一台
+
     private float timer;
+    private float currentRequiredInterval; // 當前這台車需要等待的目標時間
+
+    void Start()
+    {
+        timer = Random.Range(0f, maxSpawnInterval);
+
+        // 決定第一台車需要等待的目標時間
+        SetNextRandomInterval();
+    }
 
     void Update()
     {
         timer += Time.deltaTime;
-        if (timer >= spawnInterval)
+
+        if (timer >= currentRequiredInterval)
         {
             SpawnCar();
             timer = 0f;
+
+            // 車子生完後，決定下一台車要隔多久
+            SetNextRandomInterval();
         }
     }
 
@@ -43,6 +59,12 @@ public class CarSpawner : MonoBehaviour
 
             Debug.Log($"[車輛生成] 成功生出一輛時速 {randomSpeed:F1} 的車！");
         }
+    }
+
+    // 抽籤決定時間
+    void SetNextRandomInterval()
+    {
+        currentRequiredInterval = Random.Range(minSpawnInterval, maxSpawnInterval);
     }
 
     private void OnDrawGizmos()
