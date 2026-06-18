@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class BaseShop : MonoBehaviour
 {
+    public System.Action<GameObject> OnBuySuccess;
+
     [Header("商店設定")]
     [SerializeField] protected int requiredCost = 50; // 購買所需金幣量
 
@@ -37,10 +39,8 @@ public class BaseShop : MonoBehaviour
                         // 交易成功，使用原本的 SpendMoney() 扣除金幣
                         playerStats.SpendMoney(requiredCost);
                         Debug.Log($"{other.name} 成功購買 {gameObject.name}，扣除 {requiredCost} 元。");
-                        if(playerAudio != null && successSound != null)
-                        {
-                            playerAudio.PlayOneShot(successSound);
-                        }
+                        OnBuySuccess?.Invoke(other.gameObject);
+                        Debug.Log($"[BaseShop] Invoke OnBuySuccess: {gameObject.name}");
                     }
                 }
                 else

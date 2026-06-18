@@ -493,6 +493,8 @@ MonoBehaviour:
   requiredCost: 50
   rotateSpeed: 60
   successSound: {fileID: 8300000, guid: 6f8a256e32851db49942ad62b720fe23, type: 3}
+  audioSource: {fileID: 635440374}
+  cheerClip: {fileID: 8300000, guid: 6f8a256e32851db49942ad62b720fe23, type: 3}
 --- !u!65 &136470510
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -889,6 +891,8 @@ MonoBehaviour:
   requiredCost: 50
   rotateSpeed: 60
   successSound: {fileID: 8300000, guid: 6f8a256e32851db49942ad62b720fe23, type: 3}
+  audioSource: {fileID: 383734159}
+  cheerClip: {fileID: 8300000, guid: 6f8a256e32851db49942ad62b720fe23, type: 3}
 --- !u!1 &265324267
 GameObject:
   m_ObjectHideFlags: 0
@@ -1385,7 +1389,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 0.7
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -1500,6 +1504,7 @@ GameObject:
   - component: {fileID: 383734159}
   - component: {fileID: 383734160}
   - component: {fileID: 383734161}
+  - component: {fileID: 383734162}
   m_Layer: 8
   m_Name: 1P
   m_TagString: Player
@@ -1519,6 +1524,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b700c30daa9f3d943b2f55f4bed9db22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackAudioSource: {fileID: 383734162}
+  punchClip: {fileID: 8300000, guid: 0c03e792a9fea3642b7ca29e49f9cb41, type: 3}
   footstepAudioSource: {fileID: 383734160}
   footsteClip: {fileID: 8300000, guid: 10e15ce39fcf9c64db8f8e4d30dc55a0, type: 3}
   playerID: 1
@@ -1896,6 +1903,103 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!82 &383734162
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 383734151}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -2249,6 +2353,8 @@ MonoBehaviour:
   requiredCost: 50
   rotateSpeed: 60
   successSound: {fileID: 8300000, guid: 6f8a256e32851db49942ad62b720fe23, type: 3}
+  audioSource: {fileID: 383734159}
+  cheerClip: {fileID: 8300000, guid: 6f8a256e32851db49942ad62b720fe23, type: 3}
 --- !u!1 &465282023
 GameObject:
   m_ObjectHideFlags: 0
@@ -2916,6 +3022,7 @@ GameObject:
   - component: {fileID: 635440374}
   - component: {fileID: 635440375}
   - component: {fileID: 635440376}
+  - component: {fileID: 635440377}
   m_Layer: 8
   m_Name: 2P
   m_TagString: Player
@@ -2935,6 +3042,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b700c30daa9f3d943b2f55f4bed9db22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackAudioSource: {fileID: 635440377}
+  punchClip: {fileID: 8300000, guid: 0c03e792a9fea3642b7ca29e49f9cb41, type: 3}
   footstepAudioSource: {fileID: 635440375}
   footsteClip: {fileID: 8300000, guid: 10e15ce39fcf9c64db8f8e4d30dc55a0, type: 3}
   playerID: 2
@@ -3312,6 +3421,103 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!82 &635440377
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 635440366}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &649962657
 GameObject:
   m_ObjectHideFlags: 0
@@ -4519,6 +4725,8 @@ MonoBehaviour:
   requiredCost: 50
   rotateSpeed: 60
   successSound: {fileID: 8300000, guid: 6f8a256e32851db49942ad62b720fe23, type: 3}
+  audioSource: {fileID: 635440374}
+  cheerClip: {fileID: 8300000, guid: 6f8a256e32851db49942ad62b720fe23, type: 3}
 --- !u!65 &1192927132
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4941,6 +5149,8 @@ MonoBehaviour:
   requiredCost: 50
   rotateSpeed: 60
   successSound: {fileID: 8300000, guid: 6f8a256e32851db49942ad62b720fe23, type: 3}
+  audioSource: {fileID: 635440374}
+  cheerClip: {fileID: 8300000, guid: 6f8a256e32851db49942ad62b720fe23, type: 3}
 --- !u!65 &1316447460
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6064,6 +6274,8 @@ MonoBehaviour:
   requiredCost: 50
   rotateSpeed: 60
   successSound: {fileID: 8300000, guid: 6f8a256e32851db49942ad62b720fe23, type: 3}
+  audioSource: {fileID: 383734159}
+  cheerClip: {fileID: 8300000, guid: 6f8a256e32851db49942ad62b720fe23, type: 3}
 --- !u!1 &1876319441
 GameObject:
   m_ObjectHideFlags: 0

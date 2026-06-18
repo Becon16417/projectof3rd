@@ -2,6 +2,31 @@ using UnityEngine;
 
 public class GiftShop : BaseShop
 {
+
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip cheerClip;
+    public void Start()
+    {
+        OnBuySuccess += PlayEffect;
+    }
+    private void PlayEffect(GameObject player)
+    {
+        Animator playerAnim = player.GetComponent<Animator>();
+        AudioSource audio = player.GetComponent<AudioSource>();
+
+        if (playerAnim != null)
+        {
+            PlayerController pc = player.GetComponent<PlayerController>();
+            if(pc != null)
+            {
+                pc.StartCheer();
+            }
+        }
+        if (audio != null && cheerClip != null)
+        {
+            audio.PlayOneShot(cheerClip);
+        }
+    }
     protected override bool ApplyShopEffect(GameObject player, PlayerStats stats)
     {
         if (stats.affection >= 5)
