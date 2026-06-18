@@ -10,11 +10,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int playerID;
     public int GetPlayerID() => playerID;
 
-    [Tooltip("Movement")]
+    [Tooltip("移速")]
     [Range(500f, 800f)]
     public float moveSpeed = 600f;
 
-    [Header("KeyCode")]
+    [Header("按鍵")]
     [SerializeField] private KeyCode moveUp;
     [SerializeField] private KeyCode moveDown;
     [SerializeField] private KeyCode moveLeft;
@@ -22,16 +22,18 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private KeyCode attackKey;
     [SerializeField] private KeyCode giveKey;
 
-    [Header("attack")]
+    [Header("攻擊")]
     [SerializeField] private float attackRange = 200f; // 攻擊距離
-    [SerializeField] [Range(80f, 120f)] private float attackRadius = 100f; // 攻擊判定半徑
-    [SerializeField] [Range(0.5f, 5f)] private float stunDuration = 2.0f; // 暈眩時間
+    [Tooltip("半徑")]
+    [SerializeField][Range(80f, 120f)] private float attackRadius = 100f;// 攻擊判定半徑
+    [Tooltip("暈眩時間")]
+    [SerializeField][Range(0.5f, 5f)] private float stunDuration = 2.0f; // 暈眩時間
 
     [Header("NPC Cache")]
     private NPCVision[] cachedNPCs; // 用來儲存場景中所有 NPC 的引用
 
-    [Header("Invincibility & Boost")]
-    [SerializeField] private float invincibilityDuration = 2.0f; // 無敵時間
+    [Header("無敵 & 加速")]
+    [SerializeField] private float invincibilityDuration = 4.0f; // 無敵時間
     [SerializeField] private float speedBoostMultiplier = 1.5f; // 加速倍率
     private float invincibilityTimer = 0f;
     private bool isInvincible = false;
@@ -40,11 +42,13 @@ public class PlayerController : MonoBehaviour
     private float stunTimer = 0f;
     private Rigidbody rb;
     private Vector3 moveInput;
+    private Animator anim;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
 
+        anim = GetComponent<Animator>();
         // 在遊戲開始時只抓取一次，存進快取中
         cachedNPCs = FindObjectsOfType<NPCVision>();
 
@@ -71,10 +75,28 @@ public class PlayerController : MonoBehaviour
             {
                 rb.linearVelocity = Vector3.zero;
             }
+
+            if (footstepAudioSource.isPlaying)
+            {
+                footstepAudioSource.Pause();
+            }
+
+            if (anim != null)
+            {
+                anim.SetBool("isMoving", false);
+            }
             return;
         }
 
         GetInput();
+
+        // 判斷目前有沒有移動輸入
+        if (anim != null)
+        {
+            bool hasMovement = (moveInput != Vector3.zero);
+            anim.SetBool("isMoving", hasMovement);
+        }
+
         if (Input.GetKeyDown(attackKey))
         {
             PerformAttack();
