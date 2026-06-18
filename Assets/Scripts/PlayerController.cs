@@ -1,7 +1,12 @@
 using UnityEngine;
+using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("攻擊音效")]
+    [SerializeField] private AudioSource attackAudioSource;
+    [SerializeField] private AudioClip punchClip;
+
     [Header("腳步聲")]
     [SerializeField] private AudioSource footstepAudioSource;
     [SerializeField] private AudioClip footsteClip;
@@ -25,9 +30,9 @@ public class PlayerController : MonoBehaviour
     [Header("攻擊")]
     [SerializeField] private float attackRange = 200f; // 攻擊距離
     [Tooltip("半徑")]
-    [SerializeField][Range(80f, 120f)] private float attackRadius = 100f;// 攻擊判定半徑
+    [SerializeField] [Range(80f, 120f)] private float attackRadius = 100f;// 攻擊判定半徑
     [Tooltip("暈眩時間")]
-    [SerializeField][Range(0.5f, 5f)] private float stunDuration = 2.0f; // 暈眩時間
+    [SerializeField] [Range(0.5f, 5f)] private float stunDuration = 2.0f; // 暈眩時間
 
     [Header("NPC Cache")]
     private NPCVision[] cachedNPCs; // 用來儲存場景中所有 NPC 的引用
@@ -43,6 +48,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     private Vector3 moveInput;
     private Animator anim;
+    private bool isBusy = false;
 
     private void Start()
     {
@@ -87,8 +93,10 @@ public class PlayerController : MonoBehaviour
             }
             return;
         }
-
-        GetInput();
+        if (!isStunned)
+        {
+            GetInput();
+        }
 
         // 判斷目前有沒有移動輸入
         if (anim != null)
@@ -105,7 +113,7 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!isStunned)
+        if (!isStunned && !isBusy)
         {
             ApplyMovement();
         }
@@ -179,6 +187,18 @@ public class PlayerController : MonoBehaviour
 
     void PerformAttack()
     {
+        Debug.Log($"【動畫測試】{gameObject.name} 成功執行了 PerformAttack！anim 是否為空：{(anim == null)}");
+        if (anim != null)
+        {
+
+            anim.SetTrigger("punch");
+        }
+
+        if (attackAudioSource != null && punchClip != null)
+        {
+            attackAudioSource.PlayOneShot(punchClip);
+        }
+
         Vector3 attackPoint = transform.position + transform.forward * attackRange;
         Collider[] hitColliders = Physics.OverlapSphere(attackPoint, attackRadius);
 
@@ -256,5 +276,22 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+    public void StartCheer()
+    {
+        StartCoroutine(CheerLock(1f));
+        anim.SetTrigger("cheer");
+    }
 
+    public IEnumerator CheerLock(float time)
+    {
+        isBusy = true;
+        yield return new WaitForSeconds(time);
+        isBusy = false;
+    }
+
+    public void EndCheer()
+    {
+        isBusy = false;
+        GetInput();
+    }
 }
