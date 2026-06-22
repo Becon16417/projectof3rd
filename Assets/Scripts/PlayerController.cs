@@ -3,6 +3,9 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("特效設定")]
+    [SerializeField] private GameObject stunEffect;
+
     [Header("攻擊音效")]
     [SerializeField] private AudioSource attackAudioSource;
     [SerializeField] private AudioClip punchClip;
@@ -75,6 +78,10 @@ public class PlayerController : MonoBehaviour
             if (stunTimer <= 0)
             {
                 isStunned = false;
+                if(stunEffect != null)
+                {
+                    stunEffect.SetActive(false);
+                }
             }
 
             if (rb.linearVelocity.magnitude < 0.5f)
@@ -182,6 +189,11 @@ public class PlayerController : MonoBehaviour
         // 觸發暈眩
         isStunned = true;
         stunTimer = duration;
+
+        if(stunEffect != null)
+        {
+            stunEffect.SetActive(true);
+        }
     }
 
 
